@@ -47,18 +47,17 @@ void click1 (void *arg,void *usr_data)
 {
     button_click = !button_click;
 
-    if (button_click==true)
+        if (button_click==true)
         {
         ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, LEDC_DUTY);
         ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);
-
         }
 
         else
         {
         ledc_set_duty(LEDC_MODE, LEDC_CHANNEL, 0);
         ledc_update_duty(LEDC_MODE, LEDC_CHANNEL);    
-        }    
+        }  
 }
 
 void button()
@@ -80,12 +79,18 @@ void button()
 
 void app_main(void)
 {
+    TaskHandle_t xHandle = NULL;                                                //creating and congiguring app_main_2
+    xTaskCreate( app_main_2, "main2", 200, NULL, tskIDLE_PRIORITY, &xHandle );
+    configASSERT( xHandle );
+}
+
+ void app_main_2(void * pvParameters)
+ {
     example_ledc_init();
     button();
 
     while (1)
     {
-        vTaskDelay (1); 
+    vTaskDelay(1);
     }
-}
-
+ }
